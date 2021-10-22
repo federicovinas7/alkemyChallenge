@@ -40,3 +40,13 @@ CREATE TABLE genresPerMovie(
                                CONSTRAINT fk_gpm_genres FOREIGN KEY (genreId) REFERENCES genres(id),
                                CONSTRAINT fk_gpm_movies FOREIGN KEY (movieId) REFERENCES movies(id)
 );
+
+CREATE TABLE users(
+                      id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
+                      NAME VARCHAR(50),
+                      lastname VARCHAR(50),
+                      email VARCHAR(50),
+                      username VARCHAR(50),
+                      PASSWORD VARCHAR(50),
+                      role VARCHAR(50)
+);

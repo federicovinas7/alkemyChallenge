@@ -5,10 +5,13 @@ import com.alkemy.challenge.model.DTO.UserDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -97,6 +100,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
                 return false;
             return true;
         }
+
+    public static void verifyAuthentication(Authentication auth){
+
+        if(!((UserDTO) auth.getPrincipal()).getRole().equals(AUTH_USER))
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Access forbidden for this profile");
+    }
+
 
 }
 

@@ -31,6 +31,7 @@ public class CharacterService {
                                 .name(c.getName())
                                 .build());
         }
+        
        return characterDTOList;
     }
 
@@ -38,6 +39,7 @@ public class CharacterService {
 
         return characterRepository.save(character);
     }
+
     public Character getById(Integer id){
         return characterRepository.findById(id)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Character with id %d not found",id)));

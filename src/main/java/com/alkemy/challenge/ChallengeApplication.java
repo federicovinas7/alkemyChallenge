@@ -26,13 +26,9 @@ public class ChallengeApplication {
 			http.csrf().disable()
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests()
-					.antMatchers(HttpMethod.POST, "/login").permitAll()
-					.antMatchers(HttpMethod.POST, "/genres").permitAll()
-					.antMatchers(HttpMethod.GET, "/genres").permitAll()
-					.antMatchers(HttpMethod.POST, "/movies").permitAll()
-					.antMatchers(HttpMethod.GET, "/movies").permitAll()
-					.antMatchers(HttpMethod.POST, "/characters").permitAll()
-					.antMatchers(HttpMethod.GET, "/characters").permitAll()
+					.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
+					.antMatchers(HttpMethod.POST, "/auth/register").permitAll()
+
 					.anyRequest().authenticated();
 		}
 	}
