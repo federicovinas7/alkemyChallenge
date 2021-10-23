@@ -4,12 +4,15 @@ import com.alkemy.challenge.model.Character;
 import com.alkemy.challenge.model.DTO.CharacterDTO;
 import com.alkemy.challenge.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.alkemy.challenge.specs.CharacterSpecs.*;
 
 @Service
 public class CharacterService {
@@ -54,5 +57,17 @@ public class CharacterService {
     public void deleteCharacter(Integer characterId) {
 
         characterRepository.deleteById(characterId);
+    }
+
+    public List<Character> searchCharacter(String name, Integer characterAge, Float charWeight, Integer movieId) {
+
+        Specification<Character>spec1 = hasNameLike(name);
+        Specification<Character>spec2 = ageEquals(characterAge);
+        Specification<Character>spec3 = weightEquals(charWeight);
+
+
+        Specification<Character> specs = Specification.where(spec1).and(spec2).and(spec3);
+
+        return characterRepository.findAll(specs);
     }
 }

@@ -7,6 +7,7 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,8 +36,8 @@ public class CharacterController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Character>getById(@PathVariable Integer id){
-
+    public ResponseEntity<Character>getById(Authentication auth,@PathVariable Integer id){
+        verifyAuthentication(auth);
         Character character = characterService.getById(id);
         return  ResponseEntity.ok(character);
     }
@@ -55,6 +56,16 @@ public class CharacterController {
             return ResponseEntity.ok(character);
         else
             return ResponseEntity.created(buildURI(character.getId())).build();
+    }
+
+    @GetMapping("/search")//TODO pagination and implement filter by movieId
+    public ResponseEntity<List<Character>>searchCharacter(
+            @RequestParam (required = false,name="name") String name ,@RequestParam (required = false,name= "age")Integer characterAge,
+            @RequestParam (required = false,name="weight") Float charWeight,
+            @RequestParam(required = false,name ="movieId") Integer movieId){
+
+        List<Character>characters = characterService.searchCharacter(name,characterAge,charWeight,movieId);
+        return ResponseEntity.status(characters.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(characters);
     }
 
     @DeleteMapping("/{characterId}")

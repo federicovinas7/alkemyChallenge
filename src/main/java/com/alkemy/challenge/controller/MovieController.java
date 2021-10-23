@@ -39,7 +39,7 @@ public class MovieController {
         return ResponseEntity.ok(movieService.getById(movieId));
     }
 
-    @GetMapping()
+    @GetMapping("/search")
     public ResponseEntity<List<Movie>>searchByTitle(Authentication auth,@RequestParam String movieTitle,@RequestParam (defaultValue = "ASC")String order){
         verifyAuthentication(auth);
         List<Movie>movies = movieService.getByTitle(movieTitle,order);

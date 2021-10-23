@@ -4,6 +4,7 @@ import com.alkemy.challenge.model.DTO.MovieDTO;
 import com.alkemy.challenge.model.Movie;
 import com.alkemy.challenge.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -22,7 +23,7 @@ public class MovieService {
         this.movieRepository = movieRepository;
     }
 
-    public List<MovieDTO>getAll(String order){
+    public List<MovieDTO>getAll(){
         List<Movie>movies = movieRepository.findAll();
         List<MovieDTO>movieDTOList = new ArrayList<>();
         for(Movie m : movies){
@@ -52,9 +53,10 @@ public class MovieService {
 
     public List<Movie>getByTitle(String movieTitle,String order) {
 
-        if (!order.equals("DESC"))
-                    order = "ASC";
-        return movieRepository.searchByTitle(movieTitle,order);
+        Sort.Direction direction = Sort.Direction.ASC;
+        if(order.equalsIgnoreCase("DESC"))
+            direction = Sort.Direction.DESC;
 
+            return  movieRepository.getAllByTitleContaining(movieTitle,Sort.by(direction,"title"));
     }
 }
