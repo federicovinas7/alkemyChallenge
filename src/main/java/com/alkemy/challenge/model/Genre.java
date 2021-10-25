@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -20,7 +21,7 @@ public class Genre {
     private Integer id;
     private String name;
     private String image;
-    @ManyToMany(mappedBy = "genreList")
+    @OneToMany(mappedBy = "genre")
     @JsonIgnore
-    private List<Movie> movieList;
+    private Set<Movie> movieList;
 }

@@ -14,7 +14,7 @@ CREATE TABLE characters (
 CREATE TABLE characterPerMovie(
                                   characterId INT,
                                   movieId INT,
-                                  CONSTRAINT pk_cpm PRIMARY KEY (characterId,movieId),
+                                  CONSTRAINT pk_cpm UNIQUE PRIMARY KEY (characterId,movieId),
                                   CONSTRAINT fk_characters FOREIGN KEY (characterId) REFERENCES characters (id),
                                   CONSTRAINT fk_movies FOREIGN KEY (movieId) REFERENCES movies (id)
 )
@@ -24,7 +24,9 @@ CREATE TABLE movies(
                        image VARCHAR(50),
                        title VARCHAR(50),
                        creationDate DATE,
-                       qualification INT
+                       qualification INT,
+                       genreId INT,
+                       CONSTRAINT FK_movies_genres FOREIGN KEY (genreId) REFERENCES GENRES (id)
 )
 
 CREATE TABLE genres(
@@ -33,20 +35,13 @@ CREATE TABLE genres(
                        image VARCHAR(50)
 );
 
-CREATE TABLE genresPerMovie(
-                               genreId INT NOT NULL,
-                               movieId INT NOT NULL,
-                               CONSTRAINT pk_gpm PRIMARY KEY (genreId,movieId),
-                               CONSTRAINT fk_gpm_genres FOREIGN KEY (genreId) REFERENCES genres(id),
-                               CONSTRAINT fk_gpm_movies FOREIGN KEY (movieId) REFERENCES movies(id)
-);
 
 CREATE TABLE users(
                       id INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
                       NAME VARCHAR(50),
                       lastname VARCHAR(50),
-                      email VARCHAR(50),
-                      username VARCHAR(50),
+                      email VARCHAR(50) UNIQUE,
+                      username VARCHAR(50) UNIQUE,
                       PASSWORD VARCHAR(50),
                       role VARCHAR(50)
 );

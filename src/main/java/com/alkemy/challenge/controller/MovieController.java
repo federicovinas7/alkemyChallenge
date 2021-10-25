@@ -40,9 +40,12 @@ public class MovieController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Movie>>searchByTitle(Authentication auth,@RequestParam String movieTitle,@RequestParam (defaultValue = "ASC")String order){
+    public ResponseEntity<List<Movie>>searchByTitle(Authentication auth,
+                                                    @RequestParam (required = false,name="title")String movieTitle,
+                                                    @RequestParam (required=false,name ="genreId")Integer genreId,
+                                                    @RequestParam (defaultValue = "ASC")String order){
         verifyAuthentication(auth);
-        List<Movie>movies = movieService.getByTitle(movieTitle,order);
+        List<Movie>movies = movieService.getByTitle(movieTitle,genreId,order);
       return ResponseEntity.status(movies.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(movies);
     }
     @PostMapping

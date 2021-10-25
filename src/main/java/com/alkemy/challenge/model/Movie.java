@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -22,10 +22,9 @@ public class Movie {
     private String image;
     private Date creationDate;
     private Integer qualification;
-    @ManyToMany(mappedBy = "movieList")
-    private List<Character>characterList;
-    @ManyToMany
-    @JoinTable(name="genresPerMovie",joinColumns = @JoinColumn(name = "movieId"),inverseJoinColumns = @JoinColumn(name="genreId"))
-    private List<Genre>genreList;
+    @ManyToMany(mappedBy = "movieList",fetch = FetchType.EAGER)
+    private Set<Character>characterList;
+    @ManyToOne(cascade=CascadeType.PERSIST) @JoinColumn(name="genreId",foreignKey = @ForeignKey (name = "FK_movies_genres"))
+    Genre genre;
 
 }
