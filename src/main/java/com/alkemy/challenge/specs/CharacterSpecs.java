@@ -1,8 +1,14 @@
 package com.alkemy.challenge.specs;
 
 import com.alkemy.challenge.model.Character;
+import com.alkemy.challenge.model.Movie;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
+
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
+import java.util.Collection;
 
 @Component
 public class CharacterSpecs {
@@ -29,12 +35,22 @@ public class CharacterSpecs {
 
     }
 
-/*
+
     public static Specification<Character>inMovie(Integer movieId){
-        return (root, query, criteriaBuilder) ->
-                movieId == null ? criteriaBuilder.conjunction()
-                        :
-                        criteriaBuilder.in();
+
+       return  movieId==null ?  ((root, query, criteriaBuilder) -> criteriaBuilder.conjunction())
+            :
+         (root, query, criteriaBuilder) -> {
+
+            query.distinct(true);
+            Root<Character> character = root;
+            Subquery<Movie> movieSubquery = query.subquery(Movie.class);
+            Root<Movie>movie =movieSubquery.from(Movie.class);
+            Expression<Collection<Character>>characterMovies = movie.get("characterList");
+            movieSubquery.select(movie);
+            movieSubquery.where(criteriaBuilder.equal(movie.get("id"),movieId),criteriaBuilder.isMember(character,characterMovies));
+            return criteriaBuilder.exists(movieSubquery);
+        };
     }
-*/
+
 }

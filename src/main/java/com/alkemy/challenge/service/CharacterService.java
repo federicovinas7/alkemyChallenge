@@ -64,9 +64,11 @@ public class CharacterService {
         Specification<Character>spec1 = hasNameLike(name);
         Specification<Character>spec2 = ageEquals(characterAge);
         Specification<Character>spec3 = weightEquals(charWeight);
+        Specification<Character>spec4 = inMovie(movieId);
 
 
-        Specification<Character> specs = Specification.where(spec1).and(spec2).and(spec3);
+
+        Specification<Character> specs = Specification.where(spec1).and(spec2).and(spec3).and(spec4);
 
         return characterRepository.findAll(specs);
     }
