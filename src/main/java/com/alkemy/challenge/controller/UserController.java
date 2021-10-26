@@ -25,8 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.alkemy.challenge.utils.Constants.AUTH_USER;
-import static com.alkemy.challenge.utils.Constants.JWT_SECRET;
+import static com.alkemy.challenge.utils.Constants.*;
 import static com.alkemy.challenge.utils.EntityURIBuilder.buildURI;
 
 @RestController
@@ -47,7 +46,7 @@ public class UserController {
     public ResponseEntity<User> register(@RequestBody User user) throws IOException {
 
         User u = userService.register(user);
-        return ResponseEntity.created(buildURI(u.getId())).build();
+        return ResponseEntity.created(buildURI(USERS_PATH,u.getId().toString())).build();
     }
 
     @PostMapping("/login")

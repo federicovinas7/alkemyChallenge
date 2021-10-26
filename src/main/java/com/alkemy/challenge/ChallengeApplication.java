@@ -29,6 +29,7 @@ public class ChallengeApplication {
 					.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
 					.antMatchers(HttpMethod.POST, "/auth/register").permitAll()
 
+
 					.anyRequest().authenticated();
 		}
 	}
