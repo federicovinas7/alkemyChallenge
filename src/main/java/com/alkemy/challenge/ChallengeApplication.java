@@ -28,8 +28,11 @@ public class ChallengeApplication {
 					.authorizeRequests()
 					.antMatchers(HttpMethod.POST, "/auth/login").permitAll()
 					.antMatchers(HttpMethod.POST, "/auth/register").permitAll()
-
-
+					.antMatchers(
+							"/v2/api-docs/**",
+							"/swagger-ui/**",
+							"/swagger-resources/**",
+							"/configuration/**").permitAll()
 					.anyRequest().authenticated();
 		}
 	}
