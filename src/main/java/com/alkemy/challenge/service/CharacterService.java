@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.alkemy.challenge.specs.CharacterSpecs.*;
+import static com.alkemy.challenge.utils.Constants.CHARACTER_NOT_FOUND;
 
 @Service
 public class CharacterService {
@@ -45,18 +46,20 @@ public class CharacterService {
 
     public Character getById(Integer id){
         return characterRepository.findById(id)
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Character with id %d not found",id)));
+                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(CHARACTER_NOT_FOUND,id)));
     }
 
-    public Boolean updateCharacter(Character character) {
-        Character c = getById(character.getId());
-        characterRepository.save(character);
-        return c != null;
+    public Character updateCharacter(Character character) {
+
+        return characterRepository.save(character);
+
     }
 
     public void deleteCharacter(Integer characterId) {
 
+        if(characterRepository.existsById(characterId))
         characterRepository.deleteById(characterId);
+        else throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(CHARACTER_NOT_FOUND,characterId));
     }
 
     public List<Character> searchCharacter(String name, Integer characterAge, Float charWeight, Integer movieId) {
@@ -65,8 +68,6 @@ public class CharacterService {
         Specification<Character>spec2 = ageEquals(characterAge);
         Specification<Character>spec3 = weightEquals(charWeight);
         Specification<Character>spec4 = inMovie(movieId);
-
-
 
         Specification<Character> specs = Specification.where(spec1).and(spec2).and(spec3).and(spec4);
 

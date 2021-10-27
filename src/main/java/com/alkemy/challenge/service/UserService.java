@@ -33,11 +33,13 @@ public class UserService {
     }
     public User register(User user) throws IOException {
 
+
         if(getByUsername(user.getUsername())!=null){
             throw new ResponseStatusException(HttpStatus.CONFLICT,"username already exist,use a different one");
         }
         else{
-            sendMail();
+            user.setRole("USER");
+            sendMail(user.getName(),user.getEmail());
             return  userRepository.save(user);
         }
 

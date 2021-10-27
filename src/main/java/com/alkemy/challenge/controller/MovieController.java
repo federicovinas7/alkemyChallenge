@@ -36,7 +36,8 @@ public class MovieController {
     @GetMapping("/{movieId}")
     public ResponseEntity<Movie>getById(Authentication auth,@PathVariable Integer movieId){
         verifyAuthentication(auth);
-        return ResponseEntity.ok(movieService.getById(movieId));
+        Movie movie = movieService.getById(movieId);
+        return new ResponseEntity<>(movie,HttpStatus.OK);
     }
 
     @GetMapping("/search")
@@ -54,11 +55,18 @@ public class MovieController {
         Movie m =  movieService.addMovie(movie);
         return ResponseEntity.created(buildURI(m.getId())).build();
     }
+    @PutMapping
+    public ResponseEntity<Movie>updateMovie(Authentication auth,@RequestBody Movie movie){
+        Movie updatedMovie = movieService.updateMovie(movie);
+        return new ResponseEntity<>(movie,HttpStatus.OK);
+
+    }
 
     @DeleteMapping("/{movieId}")
-    public void deleteMovie(Authentication auth,@PathVariable Integer movieId){
+    public ResponseEntity<?> deleteMovie(Authentication auth,@PathVariable Integer movieId){
         verifyAuthentication(auth);
         movieService.deleteMovie(movieId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 

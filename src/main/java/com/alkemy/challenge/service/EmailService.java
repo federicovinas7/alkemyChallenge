@@ -15,12 +15,12 @@ public class EmailService {
 
 
 
-        public static void sendMail() throws IOException {
+        public static void sendMail(String name,String userEmail) throws IOException {
             Email from = new Email("federicovinas7@gmail.com");
-            Email to = new Email("federicovinas7@gmail.com"); // use your own email address here
+            Email to = new Email(userEmail); // use your own email address here
 
             String subject = "Registration to DISNEY API";
-            Content content = new Content("text/html", "You've succesfully register to the Disney Character API");
+            Content content = new Content("text/html", "Hi "+name + " thank you for registering to the Disney Character API");
 
             Mail mail = new Mail(from, subject, to, content);
 

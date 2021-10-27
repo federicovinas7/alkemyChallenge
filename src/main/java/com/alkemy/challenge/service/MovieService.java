@@ -3,6 +3,7 @@ package com.alkemy.challenge.service;
 import com.alkemy.challenge.model.DTO.MovieDTO;
 import com.alkemy.challenge.model.Movie;
 import com.alkemy.challenge.repository.MovieRepository;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import static com.alkemy.challenge.specs.MovieSpecs.hasGenre;
 import static com.alkemy.challenge.specs.MovieSpecs.hasTitleLike;
+import static com.alkemy.challenge.utils.Constants.MOVIE_NOT_FOUND;
 
 @Service
 public class MovieService {
@@ -47,18 +49,20 @@ public class MovieService {
 
     public Movie addMovie(Movie movie) {
 
-
         return movieRepository.save(movie);
     }
 
     public void deleteMovie(Integer movieId){
 
+        if(movieRepository.existsById(movieId))
         movieRepository.deleteById(movieId);
+        else
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(MOVIE_NOT_FOUND,movieId));
     }
 
     public Movie getById(Integer movieId) {
         return movieRepository.findById(movieId)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"movie with id " +movieId + "doesn't exists"));
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format(MOVIE_NOT_FOUND,movieId)));
     }
 
     public List<Movie>getByTitle(String movieTitle,Integer genreId,String order) {
@@ -72,5 +76,9 @@ public class MovieService {
             direction = Sort.Direction.DESC;
 
         return movieRepository.findAll(specs,Sort.by(direction,"creationDate"));
+    }
+
+    public Movie updateMovie(Movie movie) {
+        return movieRepository.save(movie);
     }
 }

@@ -49,16 +49,14 @@ public class CharacterController {
         return ResponseEntity.created(buildURI(c.getId())).build();
     }
 
-    @PutMapping()//If character already exist then modifies it, otherwise a new character it's created
+    @PutMapping()
     public ResponseEntity<Character> updateCharacter(Authentication auth,@RequestBody Character character){
         verifyAuthentication(auth);
-        if (characterService.updateCharacter(character))
-            return ResponseEntity.ok(character);
-        else
-            return ResponseEntity.created(buildURI(character.getId())).build();
+        Character updatedCharacter = characterService.updateCharacter(character);
+       return new ResponseEntity<>(updatedCharacter,HttpStatus.OK);
     }
 
-    @GetMapping("/search")//TODO pagination and implement filter by movieId
+    @GetMapping("/search")
     public ResponseEntity<List<Character>>searchCharacter(
             @RequestParam (required = false,name="name") String name ,@RequestParam (required = false,name= "age")Integer characterAge,
             @RequestParam (required = false,name="weight") Float charWeight,
@@ -69,8 +67,9 @@ public class CharacterController {
     }
 
     @DeleteMapping("/{characterId}")
-    public void deleteCharacter(Authentication auth,@PathVariable Integer characterId){
+    public ResponseEntity<?> deleteCharacter(Authentication auth,@PathVariable Integer characterId){
         verifyAuthentication(auth);
         characterService.deleteCharacter(characterId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
