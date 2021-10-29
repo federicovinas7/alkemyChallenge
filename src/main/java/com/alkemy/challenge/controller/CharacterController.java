@@ -55,11 +55,12 @@ public class CharacterController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Character>>searchCharacter(
+    public ResponseEntity<List<Character>>searchCharacter(Authentication auth,
             @RequestParam (required = false,name="name") String name ,@RequestParam (required = false,name= "age")Integer characterAge,
             @RequestParam (required = false,name="weight") Float charWeight,
             @RequestParam(required = false,name ="movieId") Integer movieId){
 
+        verifyAuthentication(auth);
         List<Character>characters = characterService.searchCharacter(name,characterAge,charWeight,movieId);
         return ResponseEntity.status(characters.isEmpty() ? HttpStatus.NO_CONTENT : HttpStatus.OK).body(characters);
     }
